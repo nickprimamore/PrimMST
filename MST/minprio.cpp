@@ -139,7 +139,38 @@ bool MinPrio::nonempty(){
  * If queue is empty, return NULL.
  * Frees the handle, so client should no longer use handle.
  */
-void* MinPrio::dequeueMin();
+void* MinPrio::dequeueMin(){
+    if(currentSize < 1){
+        return NULL;
+    }
+    int minPos = 1;
+    for(int x = 2; x < currentSize + 1; x++){
+        if(compFunc(handles[minPos],handles[x]) > 0){
+            minPos = x; 
+        }
+    }
+    handle minNode = handles[minPos];
+    handles[minPos]->content = handles[currentSize]->content;
+    handles[currentSize] = NULL;
+    currentSize--;
+    int t = minPos;
+    bool cont = true;
+    while(cont){
+        int compare = compFunc(handles[t/2]->content, handles[t]->content);
+        if(compare < 0){
+            //Parent less than child
+            handle *tempNode = new handle;
+            tempNode->content = handles[t]->content;
+            handles[t]->content = handles[t/2]->content;
+            handles[t/2]->content = tempNode->content;
+            t = t/2;
+            delete tempNode;
+        }else{
+            cont = false;
+        }
+    }
+    return minNode->content;
+}
 
 
 /* decrease the item's key
