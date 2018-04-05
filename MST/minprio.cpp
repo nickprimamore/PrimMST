@@ -153,4 +153,26 @@ void* MinPrio::dequeueMin();
  * Assumes hand is in the queue, and non-null.
  * So, do NOT test cases where hand is null or not in the queue. Even if your code handles it, don't.
  */
-void MinPrio::decreasedKey(handle* hand);
+void MinPrio::decreasedKey(handle* hand){
+    // go to the position of hand. Change the content. Check the priority and if
+    // elements need to be rearranged. 
+    
+    int queuePos = hand->pos;
+    handles[queuePos]->content = hand->content;
+    
+    while(true){
+        int compare = compFunc(handles[queuePos/2]->content, handles[queuePos]->content);
+        if(compare < 0){
+            //Parent less than child
+            handle *tempNode = new handle;
+            tempNode->content = handles[queuePos]->content;
+            
+            handles[queuePos]->content = handles[queuePos/2]->content;
+            handles[queuePos/2]->content = tempNode->content;
+            queuePos = queuePos/2;
+            delete tempNode;
+        }else{
+            return;
+        }
+    }
+}
