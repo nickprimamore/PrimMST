@@ -97,16 +97,22 @@ MinPrio::~MinPrio(){
 handle* MinPrio::enqueue(void* item){
     if(currentSize == MAXSIZE){
         return NULL;
+    }else if(currentSize = 0){
+        handles[1] = new handle;
+        handles[1]->pos = 1;
+        handles[1]->content = item;
+        currentSize++;
+        return handles[1]
     }else{
         currentSize++;
         handles[currentSize] = new handle;
         handles[currentSize]->pos = currentSize;
         handles[currentSize]->content = item;
         int t = currentSize;
-        while(true){
+        while(t/2 > 0){
             int compare = compFunc(handles[t/2]->content, handles[t]->content);
-            if(compare < 0){
-                //Parent less than child
+            if(compare > 0){
+                //Parent greater than child
                 handle *tempNode = new handle;
                 tempNode->content = handles[t]->content;
                 
@@ -144,29 +150,44 @@ void* MinPrio::dequeueMin(){
         return NULL;
     }
     int minPos = 1;
-    for(int x = 2; x < currentSize + 1; x++){
-        if(compFunc(handles[minPos],handles[x]) > 0){
-            minPos = x; 
-        }
-    }
     handle minNode = handles[minPos];
     handles[minPos]->content = handles[currentSize]->content;
     handles[currentSize] = NULL;
     currentSize--;
     int t = minPos;
     bool cont = true;
-    while(cont){
-        int compare = compFunc(handles[t/2]->content, handles[t]->content);
-        if(compare < 0){
-            //Parent less than child
-            handle *tempNode = new handle;
-            tempNode->content = handles[t]->content;
-            handles[t]->content = handles[t/2]->content;
-            handles[t/2]->content = tempNode->content;
-            t = t/2;
-            delete tempNode;
-        }else{
-            cont = false;
+    while(handles[2t] != NULL){
+        if(handles[2t+1] == NULL){
+            int compLeft = compFunc(handles[t]->content, handles[2t]->content);
+            if(compLeft > 0){
+                handle *tempNode = new handle;
+                tempNode->content = handles[t]->content;
+                handles[t]->content = handles[2t]->content;
+                handles[2t]->content = tempNode->content;
+                t = 2t;
+                delete tempNode;   
+            }
+        }
+        int compLeft = compFunc(handles[t]->content, handles[2t]->content);
+        int compRight = compFunc(handles[t]->content, handles[2t+1]->content);
+        if(compleft > 0 || compRight > 0){
+            if(compFunc(handles[2t]->content, handles[2t+1]->content) < 0){
+                //left Child less than right child
+                handle *tempNode = new handle;
+                tempNode->content = handles[t]->content;
+                handles[t]->content = handles[2t]->content;
+                handles[2t]->content = tempNode->content;
+                t = 2t;
+                delete tempNode;
+            }else{
+                //Right less than left
+                handle *tempNode = new handle;
+                tempNode->content = handles[t]->content;
+                handles[t]->content = handles[2t+1]->content;
+                handles[2t+1]->content = tempNode->content;
+                t = 2t+1;
+                delete tempNode;
+            }
         }
     }
     return minNode->content;
@@ -185,25 +206,20 @@ void* MinPrio::dequeueMin(){
  * So, do NOT test cases where hand is null or not in the queue. Even if your code handles it, don't.
  */
 void MinPrio::decreasedKey(handle* hand){
-    // go to the position of hand. Change the content. Check the priority and if
-    // elements need to be rearranged. 
-    
-    int queuePos = hand->pos;
-    handles[queuePos]->content = hand->content;
-    
-    while(true){
-        int compare = compFunc(handles[queuePos/2]->content, handles[queuePos]->content);
-        if(compare < 0){
-            //Parent less than child
+    handles[hand->pos]->content = hand->content;
+    int t = hand->pos;
+    while(t/2 > 0){
+        int compare = compFunc(handles[t/2]->content, handles[t]->content);
+        if(compare > 0){
+            //Parent greater than child
             handle *tempNode = new handle;
-            tempNode->content = handles[queuePos]->content;
-            
-            handles[queuePos]->content = handles[queuePos/2]->content;
-            handles[queuePos/2]->content = tempNode->content;
-            queuePos = queuePos/2;
+            tempNode->content = handles[t]->content;  
+            handles[t]->content = handles[t/2]->content;
+            handles[t/2]->content = tempNode->content;
+            t = t/2;
             delete tempNode;
         }else{
-            return;
+            return handles[t];
         }
     }
 }
