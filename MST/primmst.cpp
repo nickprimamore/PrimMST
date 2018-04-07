@@ -49,7 +49,7 @@ struct vertex{
     int currentDistance;
 };
 
-Comparator compare(int* lhs, int* rhs){
+Comparator compare(void* lhs, void* rhs){
     if(*lhs < *rhs){
         return -1;
     }
