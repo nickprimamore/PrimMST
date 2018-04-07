@@ -67,8 +67,8 @@ MinPrio::MinPrio(Comparator compFunc, int maxsize){
     comp = compFunc;
     currentSize = 0;
     
-    MinPrio::handle** priorityQueue = new MinPrio::handle*[MAXSIZE + 1];
-    handles = priorityQueue;
+   handles = new handle*[MAXSIZE + 1];
+
     for(int index = 1; index < MAXSIZE; index++){
         handles[index] = NULL;
     }
