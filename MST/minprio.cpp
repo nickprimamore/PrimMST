@@ -94,7 +94,7 @@ MinPrio::~MinPrio(){
  * Value of item doesn't matter. Even if NULL, enqueue it anyway
  * Returns a handle* containing the item, for use with decreaseKey.
  */
-handle* MinPrio::enqueue(void* item){
+MinPrio::handle* MinPrio::enqueue(void *item){
     if(currentSize == MAXSIZE){
         return NULL;
     }else if(currentSize = 0){
@@ -102,7 +102,7 @@ handle* MinPrio::enqueue(void* item){
         handles[1]->pos = 1;
         handles[1]->content = item;
         currentSize++;
-        return handles[1]
+        return handles[1];
     }else{
         currentSize++;
         handles[currentSize] = new handle;
@@ -110,7 +110,7 @@ handle* MinPrio::enqueue(void* item){
         handles[currentSize]->content = item;
         int t = currentSize;
         while(t/2 > 0){
-            int compare = compFunc(handles[t/2]->content, handles[t]->content);
+            int compare = comp(handles[t/2]->content, handles[t]->content);
             if(compare > 0){
                 //Parent greater than child
                 handle *tempNode = new handle;
@@ -150,42 +150,42 @@ void* MinPrio::dequeueMin(){
         return NULL;
     }
     int minPos = 1;
-    handle minNode = handles[minPos];
+    MinPrio::handle *minNode = handles[minPos];
     handles[minPos]->content = handles[currentSize]->content;
     handles[currentSize] = NULL;
     currentSize--;
     int t = minPos;
     bool cont = true;
-    while(handles[2t] != NULL){
-        if(handles[2t+1] == NULL){
-            int compLeft = compFunc(handles[t]->content, handles[2t]->content);
+    while(handles[2*t] != NULL){
+        if(handles[2*t+1] == NULL){
+            int compLeft = comp(handles[t]->content, handles[2*t]->content);
             if(compLeft > 0){
                 handle *tempNode = new handle;
                 tempNode->content = handles[t]->content;
-                handles[t]->content = handles[2t]->content;
-                handles[2t]->content = tempNode->content;
-                t = 2t;
+                handles[t]->content = handles[2*t]->content;
+                handles[2*t]->content = tempNode->content;
+                t = 2*t;
                 delete tempNode;   
             }
         }
-        int compLeft = compFunc(handles[t]->content, handles[2t]->content);
-        int compRight = compFunc(handles[t]->content, handles[2t+1]->content);
-        if(compleft > 0 || compRight > 0){
-            if(compFunc(handles[2t]->content, handles[2t+1]->content) < 0){
+        int compLeft = comp(handles[t]->content, handles[2*t]->content);
+        int compRight = comp(handles[t]->content, handles[2*t+1]->content);
+        if(compLeft > 0 || compRight > 0){
+            if(comp(handles[2*t]->content, handles[2*t+1]->content) < 0){
                 //left Child less than right child
                 handle *tempNode = new handle;
                 tempNode->content = handles[t]->content;
-                handles[t]->content = handles[2t]->content;
-                handles[2t]->content = tempNode->content;
-                t = 2t;
+                handles[t]->content = handles[2*t]->content;
+                handles[2*t]->content = tempNode->content;
+                t = 2*t;
                 delete tempNode;
             }else{
                 //Right less than left
                 handle *tempNode = new handle;
                 tempNode->content = handles[t]->content;
-                handles[t]->content = handles[2t+1]->content;
-                handles[2t+1]->content = tempNode->content;
-                t = 2t+1;
+                handles[t]->content = handles[2*t+1]->content;
+                handles[2*t+1]->content = tempNode->content;
+                t = 2*t+1;
                 delete tempNode;
             }
         }
@@ -209,7 +209,7 @@ void MinPrio::decreasedKey(handle* hand){
     handles[hand->pos]->content = hand->content;
     int t = hand->pos;
     while(t/2 > 0){
-        int compare = compFunc(handles[t/2]->content, handles[t]->content);
+        int compare = comp(handles[t/2]->content, handles[t]->content);
         if(compare > 0){
             //Parent greater than child
             handle *tempNode = new handle;
@@ -219,7 +219,8 @@ void MinPrio::decreasedKey(handle* hand){
             t = t/2;
             delete tempNode;
         }else{
-            return handles[t];
+            return;
         }
     }
+    return;
 }
