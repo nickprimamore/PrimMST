@@ -45,24 +45,28 @@
  */
 
 struct vertex{
-    int node; //??
-    int currentDistance;
+    int node;
+    float currentDistance;
 };
 
-Comparator compare(void* lhs, void* rhs){
-    if(*lhs < *rhs){
+int compare(void* lhs, void* rhs){
+    //handle what type of pointer (cast to my struct)
+    float left = ((vertex*)lhs)->currentDistance;
+    float right = ((vertex*)rhs)->currentDistance;
+    
+    if(left < right){
         return -1;
     }
-    else if(*lhs > *rhs){
+    else if(left > right){
         return 1;
     }
     else return 0;
 }
 
 Graph* minSpanTree(Graph* h){
-    Graph* MST = new Graph(h->numVerts(), 0); //I think I can put either 0 or 1?
+    Graph* MST = new Graph(h->numVerts(), 0);
     int numVertices = MST->numVerts();
-    vertex* chosenNode = new vertex;//pick some element of MST, this is what u pass in to first enqueue
+    vertex* chosenNode = new vertex;
     MinPrio* PQ = new MinPrio(&compare, numVertices);
     int* link = new int[numVertices];
     int* inQ = new int[numVertices];
@@ -76,12 +80,23 @@ Graph* minSpanTree(Graph* h){
     
     chosenNode->node = 0;
     chosenNode->currentDistance = 0;
-    handles[0] = PQ->enqueue(chosenNode); //confused with casting chosenNode
+    handles[0] = PQ->enqueue(chosenNode);
     
     for(int index = 1; index < numVertices; index++){
         vertex* currentNode = new vertex;
         currentNode->node = index;
         currentNode->currentDistance = INFINITY;
-        PQ->enqueue(currentNode); //casting confusion
+        PQ->enqueue(currentNode); 
     }
+    
+    //cast and then do ->current distance
+    
+    
+    
+    
+    
+    //return MST;
 }
+
+
+   
