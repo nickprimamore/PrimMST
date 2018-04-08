@@ -166,9 +166,10 @@ void* MinPrio::dequeueMin(){
                 handles[2*t] = tempNode;
                 handles[2*t]->pos = 2*t;
                 t = 2*t;
-                delete tempNode;   
+                //delete tempNode;
             }
         }
+        else{
         int compLeft = comp(handles[t]->content, handles[2*t]->content);
         int compRight = comp(handles[t]->content, handles[2*t+1]->content);
         if(compLeft > 0 || compRight > 0){
@@ -180,7 +181,7 @@ void* MinPrio::dequeueMin(){
                 handles[2*t] = tempNode;
                 handles[2*t]->pos = 2*t;
                 t = 2*t;
-                delete tempNode;
+                //delete tempNode;
             }else{
                 //Right less than left
                 handle *tempNode = handles[t];
@@ -189,10 +190,12 @@ void* MinPrio::dequeueMin(){
                 handles[2*t+1] = tempNode;
                 handles[2*t+1]->pos = 2*t+1;
                 t = 2*t+1;
-                delete tempNode;
+                //delete tempNode;
             }
         }
+        }
     }
+    //printf("end of dequeue\n");
     return minNode->content;
 }
 
@@ -229,3 +232,4 @@ void MinPrio::decreasedKey(handle* hand){
     }
     return;
 }
+
