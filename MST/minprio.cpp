@@ -167,32 +167,35 @@ void* MinPrio::dequeueMin(){
                 handles[2*t]->pos = 2*t;
                 t = 2*t;
                 //delete tempNode;
+            }else{
+                return minNode->content;
             }
         }
         else{
-        int compLeft = comp(handles[t]->content, handles[2*t]->content);
-        int compRight = comp(handles[t]->content, handles[2*t+1]->content);
-        if(compLeft > 0 || compRight > 0){
-            if(comp(handles[2*t]->content, handles[2*t+1]->content) < 0){
-                //left Child less than right child
-                handle *tempNode = handles[t];
-                handles[t] = handles[2*t];
-                handles[t]->pos = t;
-                handles[2*t] = tempNode;
-                handles[2*t]->pos = 2*t;
-                t = 2*t;
-                //delete tempNode;
-            }else{
-                //Right less than left
-                handle *tempNode = handles[t];
-                handles[t] = handles[2*t+1];
-                handles[t]->pos = t;
-                handles[2*t+1] = tempNode;
-                handles[2*t+1]->pos = 2*t+1;
-                t = 2*t+1;
-                //delete tempNode;
+            int compLeft = comp(handles[t]->content, handles[2*t]->content);
+            int compRight = comp(handles[t]->content, handles[2*t+1]->content);
+            if(compLeft > 0 || compRight > 0){
+                if(comp(handles[2*t]->content, handles[2*t+1]->content) < 0){
+                    //left Child less than right child
+                    handle *tempNode = handles[t];
+                    handles[t] = handles[2*t];
+                    handles[t]->pos = t;
+                    handles[2*t] = tempNode;
+                    handles[2*t]->pos = 2*t;
+                    t = 2*t;
+                    //delete tempNode;
+                }else{
+                    //Right less than left
+                    handle *tempNode = handles[t];
+                    handles[t] = handles[2*t+1];
+                    handles[t]->pos = t;
+                    handles[2*t+1] = tempNode;
+                    handles[2*t+1]->pos = 2*t+1;
+                    t = 2*t+1;
+                    //delete tempNode;
+                }
             }
-        }
+            return minNode->content;
         }
     }
     //printf("end of dequeue\n");
@@ -232,4 +235,3 @@ void MinPrio::decreasedKey(handle* hand){
     }
     return;
 }
-
