@@ -110,6 +110,16 @@ Graph* minSpanTree(Graph* h){
         MST->addEdge(link[index], index, h->edge(link[index], index));
     }
     
-    //delete handles?
+    delete chosenNode;
+    delete PQ;
+    delete link;
+    delete inQ;
+    for(int index = 0; index < numVertices; index++){
+        if(handles[index] != NULL){
+            delete handles[index];
+        }
+    }
+    delete handles;
+ 
     return MST;
 }
