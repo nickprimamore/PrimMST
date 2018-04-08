@@ -44,15 +44,15 @@
  * (using the & operator and the function name)
  */
 
-struct vertex{
+struct content{
     int node;
     float currentDistance;
 };
 
 int compare(void* lhs, void* rhs){
     //handle what type of pointer (cast to my struct)
-    float left = ((vertex*)lhs)->currentDistance;
-    float right = ((vertex*)rhs)->currentDistance;
+    float left = ((content*)lhs)->currentDistance;
+    float right = ((content*)rhs)->currentDistance;
     
     if(left < right){
         return -1;
@@ -66,7 +66,7 @@ int compare(void* lhs, void* rhs){
 Graph* minSpanTree(Graph* h){
     Graph* MST = new Graph(h->numVerts(), 0);
     int numVertices = MST->numVerts();
-    vertex* chosenNode = new vertex;
+    content* chosenNode = new content;
     MinPrio* PQ = new MinPrio(&compare, numVertices);
     int* link = new int[numVertices];
     int* inQ = new int[numVertices];
@@ -83,20 +83,32 @@ Graph* minSpanTree(Graph* h){
     handles[0] = PQ->enqueue(chosenNode);
     
     for(int index = 1; index < numVertices; index++){
-        vertex* currentNode = new vertex;
+        content* currentNode = new content;
         currentNode->node = index;
         currentNode->currentDistance = INFINITY;
-        PQ->enqueue(currentNode); 
+        handles[index] = PQ->enqueue(currentNode);
     }
     
-    //cast and then do ->current distance
+    while(PQ->nonempty()){
+        int v = ((content*)(PQ->dequeueMin()))->node;
+        inQ[v] = 0;
+        handles[v] = NULL;
+        int* suc = h->successors(v);
+        for(int index = 0; suc[index] != -1; index++){
+            if(inQ[suc[index]] == 1 && h->edge(suc[index], v) <
+                ((content*)handles[suc[index]]->content)->currentDistance){
+                
+                link[suc[index]] = v;
+                ((content*)handles[suc[index]]->content)->currentDistance = h->edge(suc[index], v);
+                PQ->decreasedKey(handles[suc[index]]);
+            }
+        }
+    }
     
+    for(int index = 0; index < numVertices; index++){
+        MST->addEdge(index, link[index], h->edge(index, link[index]));
+        MST->addEdge(link[index], index, h->edge(link[index], index));
+    }
     
-    
-    
-    
-    //return MST;
+    return MST;
 }
-
-
-   
