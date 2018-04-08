@@ -2,7 +2,7 @@
  "I pledge my honor that I have abided by the Stevens Honor System."
   Matthew Monaco and Nicholas Primamore
  
- primmst.cpp
+  primmst.cpp
  *******************************************************************/
 
 
@@ -94,6 +94,7 @@ Graph* minSpanTree(Graph* h){
         inQ[v] = 0;
         handles[v] = NULL;
         int* suc = h->successors(v);
+        
         for(int index = 0; suc[index] != -1; index++){
             if(inQ[suc[index]] == 1 && h->edge(suc[index], v) <
                 ((content*)handles[suc[index]]->content)->currentDistance){
@@ -104,7 +105,7 @@ Graph* minSpanTree(Graph* h){
             }
         }
     }
-    
+   
     for(int index = 0; index < numVertices; index++){
         MST->addEdge(index, link[index], h->edge(index, link[index]));
         MST->addEdge(link[index], index, h->edge(link[index], index));
@@ -120,6 +121,6 @@ Graph* minSpanTree(Graph* h){
         }
     }
     delete handles;
- 
+    
     return MST;
 }
