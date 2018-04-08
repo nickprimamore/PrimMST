@@ -194,8 +194,9 @@ void* MinPrio::dequeueMin(){
                     t = 2*t+1;
                     //delete tempNode;
                 }
+            }else{
+                return minNode->content;
             }
-            return minNode->content;
         }
     }
     //printf("end of dequeue\n");
