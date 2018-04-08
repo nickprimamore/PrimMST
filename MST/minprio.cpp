@@ -96,7 +96,7 @@ MinPrio::~MinPrio(){
 MinPrio::handle* MinPrio::enqueue(void *item){
     if(currentSize == MAXSIZE){
         return NULL;
-    }else if(currentSize = 0){
+    }else if(currentSize == 0){
         handles[1] = new handle;
         handles[1]->pos = 1;
         handles[1]->content = item;
@@ -118,11 +118,12 @@ MinPrio::handle* MinPrio::enqueue(void *item){
                 handles[t/2] = tempNode;
                 handles[t/2]->pos = t/2;
                 t = t/2;
-                delete tempNode;
+                //delete tempNode;
             }else{
                 return handles[t];
             }
         }
+        return handles[t];
     }
 }
 
@@ -148,12 +149,12 @@ void* MinPrio::dequeueMin(){
     if(currentSize < 1){
         return NULL;
     }
-    int minPos = 1;
-    MinPrio::handle *minNode = handles[minPos];
-    handles[minPos]->content = handles[currentSize]->content;
+    MinPrio::handle *minNode = handles[1];
+    handles[1] = handles[currentSize];
+    handles[1]->pos = 1;
     handles[currentSize] = NULL;
     currentSize--;
-    int t = minPos;
+    int t = 1;
     bool cont = true;
     while(handles[2*t] != NULL){
         if(handles[2*t+1] == NULL){
