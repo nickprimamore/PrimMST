@@ -156,8 +156,8 @@ void* MinPrio::dequeueMin(){
     currentSize--;
     int t = 1;
     bool cont = true;
-    while(handles[2*t] != NULL){
-        if(handles[2*t+1] == NULL){
+    while(2*t <= currentSize){
+        if(((2*t)+ 1) > currentSize ){
             int compLeft = comp(handles[t]->content, handles[2*t]->content);
             if(compLeft > 0){
                 handle *tempNode = handles[t];
