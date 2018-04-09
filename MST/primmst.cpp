@@ -91,6 +91,7 @@ Graph* minSpanTree(Graph* h){
     
     while(PQ->nonempty()){
         int v = ((content*)(PQ->dequeueMin()))->node;
+        printf("%d\n",v);
         inQ[v] = 0;
         handles[v] = NULL;
         int* suc = h->successors(v);
